@@ -23,8 +23,8 @@
 #include "arduinoFFT.h" // Standard Arduino FFT library https://github.com/kosme/arduinoFFT
 #include <WiFi.h>
 #include <Adafruit_Protomatter.h>
-#include <Matrix_Config_GM.h>
-#include <Secret.h>
+#include "Matrix_Config_GM.h"
+#include "Secret.h"
 #include <ezTime.h>
 #include "atawi8b.h"
 #include "atawi10b.h"
