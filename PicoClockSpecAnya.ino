@@ -11,7 +11,7 @@
 #include <Adafruit_Protomatter.h>
 #include "Matrix_Config_GM.h"
 
-// Ensure this line Secret.h is in " " not < > as i have My Secrets in a library Not Working Directory
+// Ensure this line Secret.h is wraped in " " not < > as i have My Secrets in a library Not in Working Directory
 #include <Secret.h>    
 
 #include <ezTime.h>

@@ -1,6 +1,6 @@
 #pragma once
 // GM Matrix Daughterboard Config
-// Nothing to edit in here
+// Nothing to edit in here if using My Pico Adaptor board
 
 
 #include <FS.h>
@@ -14,7 +14,8 @@
 #if !defined(M_HEIGHT)
 #define M_HEIGHT 32
 #endif
-// RPi, Pico / PicoW
+
+// RPi, Pico / PicoW Pin Assignments
 
 #if defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
 
@@ -44,8 +45,7 @@
 #define I2C_SDA 20
 #define I2C_SCK 21
 
-
-// ESP32 Pinout
+// ESP32 Pin Assignments
 #elif defined(ARDUINO_ARCH_ESP32)
 #define matrix_CLK 15
 #define matrix_OE 33
@@ -74,37 +74,6 @@
 #define I2C_SCK 21
 
 #endif
-// ESP32 Pinout V2
-// #elif defined(ARDUINO_ARCH_ESP32)
-// #define matrix_CLK 17
-// #define matrix_OE 16
-// #define matrix_LAT 15
-// #define matrix_A 15
-// #define matrix_B 2
-// #define matrix_C 0
-// #define matrix_D 4
-
-// #define matrix_R1 12
-// #define matrix_R2 13
-// #define matrix_G1 14
-// #define matrix_G2 25
-// #define matrix_B1 26
-// #define matrix_B2 27
-    
-//     // Set default SPI Pins
-
-// #define SPI0_MISO 19
-// #define SPI0_MOSI 23
-// #define SPI0_CLK 18
-// #define SDCARD_CS 5
-
-//     // Reset default I2C Pins
-// #define I2C_SDA 21
-// #define I2C_SCK 22
-
-// #endif
-
-
 
 // #define bitDepth 6
 
