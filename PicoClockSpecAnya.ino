@@ -17,6 +17,7 @@
 #include <ezTime.h>
 #include "atawi8b.h"
 #include "atawi10b.h"
+
 arduinoFFT FFT = arduinoFFT();
 /////////////////////////////////////////////////////////////////////////
 Adafruit_Protomatter display(
@@ -27,7 +28,8 @@ Adafruit_Protomatter display(
     clockPin, latchPin, oePin, // Other matrix control pins
     true,                     // No double-buffering here (see "doublebuffer" example)
     1);
-#define BANDS                   // Comment out for 16 bands 
+
+//#define BANDS                   // Comment out for 16 bands 
 #define TZ 0
 #define SAMPLES 1024            // Must be a power of 2 
 #define SAMPLING_FREQUENCY 30000 // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
