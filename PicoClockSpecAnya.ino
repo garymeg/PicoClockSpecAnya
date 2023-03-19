@@ -2,35 +2,23 @@
  * Improved noise performance and speed and resolution.
   *####################################################################################################################################
  This software, the ideas and concepts is Copyright (c) David Bird 2018. All rights to this software are reserved.
-
- Any redistribution or reproduction of any part or all of the contents in any form is prohibited other than the following:
- 1. You may print or download to a local hard disk extracts for your personal and non-commercial use only.
- 2. You may copy the content to individual third parties for their personal use, but only if you acknowledge the author David Bird as the source of the material.
- 3. You may not, except with my express written permission, distribute or commercially exploit the content.
- 4. You may not transmit it or store it in any other website or other form of electronic retrieval system for commercial purposes.
- The above copyright ('as annotated') notice and this permission notice shall be included in all copies or substantial portions of the Software and where the
- software use is visible to an end-user.
-
- THE SOFTWARE IS PROVIDED "AS IS" FOR PRIVATE USE ONLY, IT IS NOT FOR COMMERCIAL USE IN WHOLE OR PART OR CONCEPT. FOR PERSONAL USE IT IS SUPPLIED WITHOUT WARRANTY
- OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- IN NO EVENT SHALL THE AUTHOR OR COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- See more at http://www.dsbird.org.uk
 */
-#define _HOME_
+#define _HOME_   // this is not needed only for My Personal Secret.h File
 
 #include <Wire.h>
-#include "arduinoFFT.h" // Standard Arduino FFT library https://github.com/kosme/arduinoFFT
+#include <arduinoFFT.h> // Standard Arduino FFT library https://github.com/kosme/arduinoFFT
 #include <WiFi.h>
 #include <Adafruit_Protomatter.h>
 #include "Matrix_Config_GM.h"
-#include "Secret.h"
+
+// Ensure this line Secret.h is in " " not < > as i have My Secrets in a library Not Working Directory
+#include <Secret.h>    
+
 #include <ezTime.h>
 #include "atawi8b.h"
 #include "atawi10b.h"
 arduinoFFT FFT = arduinoFFT();
 /////////////////////////////////////////////////////////////////////////
-// Comment out the display your NOT using e.g. if you have a 1.3" display comment out the SSD1306 library and object
 Adafruit_Protomatter display(
     M_WIDTH,                   // Width of matrix (or matrix chain) in pixels
     4,                         // Bit depth, 1-6
@@ -39,7 +27,7 @@ Adafruit_Protomatter display(
     clockPin, latchPin, oePin, // Other matrix control pins
     true,                     // No double-buffering here (see "doublebuffer" example)
     1);
-
+#define BANDS                   // Comment out for 16 bands 
 #define TZ 0
 #define SAMPLES 1024            // Must be a power of 2 
 #define SAMPLING_FREQUENCY 30000 // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
@@ -131,50 +119,37 @@ void loop()
         // Each array element represents a frequency and its value, is the amplitude. Note the frequencies are not discrete.
         if (vReal[i] > 1500)
         { // Add a crude noise filter
-
-            /*8 bands, 12kHz top band
-              if (i<=3 )           displayBand(0]  += (int)vReal[i];
-              if (i>3   && i<=6  ) displayBand(1]  += (int)vReal[i];
-              if (i>6   && i<=13 ) displayBand(2]  += (int)vReal[i];
-              if (i>13  && i<=27 ) displayBand(3]  += (int)vReal[i];
-              if (i>27  && i<=55 ) displayBand(4]  += (int)vReal[i];
-              if (i>55  && i<=112) displayBand(5]  += (int)vReal[i];
-              if (i>112 && i<=229) displayBand(6]  += (int)vReal[i];
-              if (i>229          ) displayBand(7]  += (int)vReal[i];*/
-
+            #if defined(BANDS)
+            /*8 bands, 12kHz top band*/
+              if (i<=3 )            displayBand(0, (int)vReal[i]);
+              if (i>3   && i<=6  )  displayBand(1, (int)vReal[i]);
+              if (i>6   && i<=13 )  displayBand(2, (int)vReal[i]);
+              if (i>13  && i<=27 )  displayBand(3, (int)vReal[i]);
+              if (i>27  && i<=55 )  displayBand(4, (int)vReal[i]);
+              if (i>55  && i<=112)  displayBand(5, (int)vReal[i]);
+              if (i>112 && i<=229)  displayBand(6, (int)vReal[i]);
+              if (i>229          )  displayBand(7, (int)vReal[i]);
+            
+            #else
             // 16 bands, 12kHz top band
-            if (i <= 2)
-                displayBand(0, (int)vReal[i]);
-            if (i > 2 && i <= 3)
-                displayBand(1, (int)vReal[i]);
-            if (i > 3 && i <= 5)
-                displayBand(2, (int)vReal[i]);
-            if (i > 5 && i <= 7)
-                displayBand(3, (int)vReal[i]);
-            if (i > 7 && i <= 9)
-                displayBand(4, (int)vReal[i]);
-            if (i > 9 && i <= 13)
-                displayBand(5, (int)vReal[i]);
-            if (i > 13 && i <= 18)
-                displayBand(6, (int)vReal[i]);
-            if (i > 18 && i <= 25)
-                displayBand(7, (int)vReal[i]);
-            if (i > 25 && i <= 36)
-                displayBand(8, (int)vReal[i]);
-            if (i > 36 && i <= 50)
-                displayBand(9, (int)vReal[i]);
-            if (i > 50 && i <= 69)
-                displayBand(10, (int)vReal[i]);
-            if (i > 69 && i <= 97)
-                displayBand(11, (int)vReal[i]);
-            if (i > 97 && i <= 135)
-                displayBand(12, (int)vReal[i]);
-            if (i > 135 && i <= 189)
-                displayBand(13, (int)vReal[i]);
-            if (i > 189 && i <= 264)
-                displayBand(14, (int)vReal[i]);
-            if (i > 264)
-                displayBand(15, (int)vReal[i]);
+            if (i <= 2)             displayBand(0, (int)vReal[i]);
+            if (i > 2 && i <= 3)    displayBand(1, (int)vReal[i]);
+            if (i > 3 && i <= 5)    displayBand(2, (int)vReal[i]);
+            if (i > 5 && i <= 7)    displayBand(3, (int)vReal[i]);
+            if (i > 7 && i <= 9)    displayBand(4, (int)vReal[i]);
+            if (i > 9 && i <= 13)   displayBand(5, (int)vReal[i]);
+            if (i > 13 && i <= 18)  displayBand(6, (int)vReal[i]);
+            if (i > 18 && i <= 25)  displayBand(7, (int)vReal[i]);
+            if (i > 25 && i <= 36)  displayBand(8, (int)vReal[i]);
+            if (i > 36 && i <= 50)  displayBand(9, (int)vReal[i]);
+            if (i > 50 && i <= 69)  displayBand(10, (int)vReal[i]);
+            if (i > 69 && i <= 97)  displayBand(11, (int)vReal[i]);
+            if (i > 97 && i <= 135) displayBand(12, (int)vReal[i]);
+            if (i > 135 && i <= 189)displayBand(13, (int)vReal[i]);
+            if (i > 189 && i <= 264)displayBand(14, (int)vReal[i]);
+            if (i > 264)            displayBand(15, (int)vReal[i]);
+
+        #endif
         }
         for (byte band = 0; band <= 15; band++)
             display.drawLine((4) * band, 32 - peak[band], ((4) * band) + BAR_WIDTH-1, 32 - peak[band], display.color565(50,0,0));
